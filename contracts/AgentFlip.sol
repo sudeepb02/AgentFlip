@@ -47,6 +47,11 @@ interface IExchangeRates {
     function rateIsStale(bytes32 currencyKey) external view returns (bool);
 }
 
+interface CErc20Interface {
+    function mint(uint mintAmount) external returns (uint);
+    function redeem(uint redeemTokens) external returns (uint);
+}
+
 contract AgentFlip {
     // Variables
     KyberNetworkProxy public kyberNetworkProxyContract;
@@ -54,7 +59,7 @@ contract AgentFlip {
 
     // ropsten
     address public proxySynthetix = 0x013AE307648f529aa72c5767A334DDd37aaB43c3;
-    address public uniswapSethExchange = 0x9196c28E45c02C05D056309e2eEbd48095FaC24E; 
+    address public uniswapSethExchange = 0x9196c28E45c02C05D056309e2eEbd48095FaC24E;
     address public feePoolAddress = 0x0B7e1DC538e1A8Db415Ab1D4c5107325Dd4BD705;
     address public exchangeRates = 0x22f1ba6dB6ca0A065e1b7EAe6FC22b7E675310EF;
 
@@ -80,6 +85,20 @@ contract AgentFlip {
     ) public {
         kyberNetworkProxyContract = _kyberNetworkProxyContract;
     }
+
+    //CDAI mmint and redeem
+    CErc20Interface CdaiInterface = CErc20Interface(0x2B536482a01E620eE111747F8334B395a42A555E);
+  address daiOnRopsten = 0xb5e5d0f8c0cba267cd3d7035d6adc8eba7df7cdd;
+  uint qty = 10000000000000000000;
+
+  function getCdai() public {
+      ERC20 token = ERC20(daiOnRopsten);
+
+      require(token.transferFrom(msg.sender, address(this), qty));
+
+      CdaiInterface.mint(qty);
+  }
+
 
     //TO-DO Add modifiers to setter functions
     /**
@@ -248,4 +267,3 @@ contract AgentFlip {
     //Fallback function
     function() public payable {}
 }
-
