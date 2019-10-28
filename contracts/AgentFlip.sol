@@ -88,10 +88,9 @@ contract AgentFlip {
 
     //CDAI mmint and redeem
     CErc20Interface CdaiInterface = CErc20Interface(0x2B536482a01E620eE111747F8334B395a42A555E);
-  address daiOnRopsten = 0xb5e5d0f8c0cba267cd3d7035d6adc8eba7df7cdd;
-  uint qty = 10000000000000000000;
+    address daiOnRopsten = 0xb5e5d0f8c0cba267cd3d7035d6adc8eba7df7cdd;
 
-  function getCdai() public {
+  function getCdai(uint256 qty) public {
       ERC20 token = ERC20(daiOnRopsten);
 
       require(token.transferFrom(msg.sender, address(this), qty));
